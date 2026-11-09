@@ -1,6 +1,36 @@
 <!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#286257"><title>梅姐家庭理髮｜預約系統</title><style>
 :root{font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif;color:#263a34;background:#f4f7f5}*{box-sizing:border-box}body{margin:0}.wrap{max-width:720px;margin:auto;padding:16px 14px 45px}header{background:#286257;color:#fff;border-radius:20px;padding:23px 20px}h1{font-size:26px;margin:0 0 8px}h2{font-size:20px;margin:0 0 14px}h3{font-size:16px;margin:18px 0 9px}header p{margin:5px 0;font-size:14px}.card{background:white;border-radius:16px;margin-top:14px;padding:18px;box-shadow:0 2px 14px #1b433215}.tabs,.two,.slots,.row{display:flex;gap:9px;flex-wrap:wrap}.tabs>*{flex:1}.two>*{flex:1}.slots button{width:calc(25% - 7px);min-width:0;padding:10px 2px}.row{align-items:center;justify-content:space-between}button,input,select{font:inherit;min-height:46px;padding:11px;border:1px solid #bccfc7;border-radius:11px;background:white;color:#254e43}button{cursor:pointer;font-weight:650}button.active,button.primary{background:#286257;color:white;border-color:#286257}button:disabled{opacity:.38;cursor:not-allowed}input,select{width:100%}label{display:block;font-weight:650;margin:14px 0 6px}.hint{color:#64786e;font-size:13px;line-height:1.6}.warning{background:#fff4e5;color:#8a5709;padding:11px;border-radius:10px}.error{color:#a52b32}.success{color:#17704b}.hidden{display:none!important}.booking{border:1px solid #dbe8e1;padding:13px;border-radius:12px;margin:10px 0}.booking p{margin:6px 0}.pill{font-size:12px;background:#e8f4ee;border-radius:30px;padding:4px 9px;display:inline-block}.actions{display:flex;gap:8px;flex-wrap:wrap}.actions button{min-height:39px;padding:7px 12px}.wide{width:100%}.count{font-weight:750;color:#a14b14}footer{text-align:center;font-size:12px;color:#6d8077;padding:22px}.switch{display:flex;align-items:center;gap:7px;margin:8px 0}.switch input{width:auto;min-height:auto}button:focus-visible,input:focus-visible{outline:3px solid #8bd0a6} @media(max-width:380px){.slots button{width:calc(33.333% - 6px)}}
-</style></head><body><div class="wrap"><header><h1>✂️ 梅姐家庭理髮</h1><p>梅姐／文姐 · 每次 30 分鐘 · 08:00–19:00</p><p>每週四公休｜新竹市東區振興路10號</p></header><section class="card"><div class="tabs"><button id="guestTab" class="active">客人預約</button><button id="adminTab">店家管理 <span id="badge"></span></button></div><p id="modeInfo" class="hint"></p></section>
+/* 預約時間按鈕美化 */
+#slots {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 14px;
+}
+
+#slots .time-slot {
+  background: #ffffff;
+  color: #286458;
+  border: 1px solid #c5d8d2;
+  border-radius: 12px;
+  padding: 15px 4px;
+  font-size: 17px;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+  cursor: pointer;
+}
+
+#slots .time-slot.active {
+  background: #286458;
+  color: white;
+  border-color: #286458;
+  box-shadow: 0 3px 9px rgba(40,100,88,0.2);
+}
+
+#slots .time-slot:active {
+  transform: scale(0.97);
+}</style></head><body><div class="wrap"><header><h1>✂️ 梅姐家庭理髮</h1><p>梅姐／文姐 · 每次 30 分鐘 · 08:00–19:00</p><p>每週四公休｜新竹市東區振興路10號</p></header><section class="card"><div class="tabs"><button id="guestTab" class="active">客人預約</button><button id="adminTab">店家管理 <span id="badge"></span></button></div><p id="modeInfo" class="hint"></p></section>
 <main id="guest"><section class="card"><h2>線上預約申請</h2><h3>① 指定設計師</h3><div class="two"><button class="active" data-stylist="梅姐">梅姐</button><button data-stylist="文姐">文姐</button></div><label for="date">② 預約日期</label><input type="date" id="date"><p id="leaveTip" class="warning hidden"></p><button id="switchStylist" class="hidden">改約另一位設計師</button><h3>③ 選擇時間</h3><div class="slots" id="slots"></div><p class="hint" id="slotInfo"></p><label for="name">④ 客人姓名</label><input id="name" maxlength="50" placeholder="請輸入姓名"><label for="phone">手機號碼</label><input id="phone" type="tel" inputmode="tel" placeholder="0912345678"><p class="hint">送出後是「待確認」，需由梅姐或文姐審核後才成立。</p><button class="primary wide" id="submit">送出預約申請</button><p id="guestMsg" role="status"></p></section><section class="card"><h2>查詢我的預約</h2><label>預約編號</label><input id="code" placeholder="送出申請後取得"><label>預約手機號碼</label><input id="lookupPhone" type="tel" inputmode="tel" placeholder="0912345678"><button id="lookup" style="margin-top:12px">查詢預約狀態</button><p id="lookupMsg" role="status"></p></section></main>
 <main id="admin" class="hidden"><section class="card"><h2>店家管理後台</h2><div id="loginArea"><p class="hint" id="loginHint">梅姐與文姐各自登入，皆可處理兩人的預約。</p><label>Email</label><input id="email" type="email" autocomplete="username"><label>密碼</label><input id="password" type="password" autocomplete="current-password"><button class="primary wide" id="login" style="margin-top:12px">登入店家管理</button></div><div id="adminArea" class="hidden"><div class="row"><span class="pill">店家管理模式</span><button id="logout">登出</button></div><h3>🔔 待確認預約 <span class="count" id="pendingCount">0</span></h3><div id="pending"></div><h3>指定日期預約</h3><label>查看日期</label><input type="date" id="adminDate"><label>設計師</label><select id="adminFilter"><option value="">全部</option><option>梅姐</option><option>文姐</option></select><button id="refresh" style="margin-top:10px">重新整理</button><div id="bookings"></div><hr style="border:0;border-top:1px solid #e1eae4;margin:22px 0"><h2>🏖️ 請假與休息時段</h2><p class="hint">可設定連續多天出國、單日休假，或指定半小時時段。只影響選定的設計師。</p><label>請假設計師</label><select id="blockStylist"><option>梅姐</option><option>文姐</option></select><label>請假類型</label><select id="blockType"><option value="range">連續日期（出國旅遊）</option><option value="day">單日全天</option><option value="partial">單日指定時段</option></select><label>開始日期</label><input type="date" id="startDate"><div id="endDateBox"><label>結束日期（包含當天）</label><input type="date" id="endDate"></div><div id="timeBox" class="hidden"><div class="two"><div><label>開始時間</label><select id="startTime"></select></div><div><label>結束時間</label><select id="endTime"></select></div></div></div><label>原因（選填）</label><input id="reason" placeholder="例如：出國旅遊"><button class="primary wide" id="saveBlock" style="margin-top:14px">儲存休假／封鎖</button><p id="blockMsg" role="status"></p><h3>已設定休假</h3><div id="blockList"></div></div><p id="adminMsg" role="status"></p></section></main><footer>梅姐家庭理髮 · 預約申請須經店家確認</footer></div>
 <script>
