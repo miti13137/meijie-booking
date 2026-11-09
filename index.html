@@ -34,14 +34,7 @@ async function loadSlots(){const d=$('date').value;renderSlots([]);$('leaveTip')
     .filter(x => x.available === true)
     .map(x => String(x.slot_start ?? '沒有時間資料'))
 );
-  .filter(x => x.available === true)
-  .map(x => new Date(x.slot_start).toLocaleTimeString('en-GB', {
-    timeZone: 'Asia/Taipei',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false
-  }))
-);if(!data?.length){$('leaveTip').textContent=`${stylist}當天沒有可預約時段，您可以改選另一位設計師。`;$('leaveTip').classList.remove('hidden');$('switchStylist').classList.remove('hidden')}showMsg('slotInfo',`已顯示 ${stylist} 的 ${data?.length||0} 個可申請時段。`);return}
+ if(!data?.length){$('leaveTip').textContent=`${stylist}當天沒有可預約時段，您可以改選另一位設計師。`;$('leaveTip').classList.remove('hidden');$('switchStylist').classList.remove('hidden')}showMsg('slotInfo',`已顯示 ${stylist} 的 ${data?.length||0} 個可申請時段。`);return}
 const list=slots.filter(t=>!(d===today&&minute(t)<=new Date().getHours()*60+new Date().getMinutes())&&!records.some(r=>r.stylist===stylist&&r.day===d&&r.slot===t&&['待確認','已確認'].includes(r.status))&&!currentBlock(stylist,d,t));renderSlots(list);
 const isLeave=slots.every(t=>!!currentBlock(stylist,d,t));if(isLeave){$('leaveTip').textContent=`${stylist}這天休假，您可以直接改約${stylist==='梅姐'?'文姐':'梅姐'}，已填的客人資料不會清除。`;$('leaveTip').classList.remove('hidden');$('switchStylist').classList.remove('hidden')}
 if(!list.length&&!isLeave){$('leaveTip').textContent=`${stylist}當日沒有可預約時段，您可以改選${stylist==='梅姐'?'文姐':'梅姐'}，或更換日期。`;$('leaveTip').classList.remove('hidden');$('switchStylist').classList.remove('hidden')}
