@@ -35,7 +35,14 @@ async function loadSlots(){const d=$('date').value;renderSlots([]);$('leaveTip')
 });if(error){showMsg('slotInfo','讀取時段失敗：'+error.message,'error');return}renderSlots(
   (data || [])
     .filter(x => x.available === true)
-    .map(x => String(x.slot_start ?? '沒有時間資料'))
+    
+.map(x => new Date(x.slot_start).toLocaleTimeString('en-GB', {
+  timeZone: 'Asia/Taipei',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false
+}))
+
 );
  if(!data?.length){$('leaveTip').textContent=`${stylist}當天沒有可預約時段，您可以改選另一位設計師。`;$('leaveTip').classList.remove('hidden');$('switchStylist').classList.remove('hidden')}showMsg('slotInfo',`已顯示 ${stylist} 的 ${data?.length||0} 個可申請時段。`);return}
 const list=slots.filter(t=>!(d===today&&minute(t)<=new Date().getHours()*60+new Date().getMinutes())&&!records.some(r=>r.stylist===stylist&&r.day===d&&r.slot===t&&['待確認','已確認'].includes(r.status))&&!currentBlock(stylist,d,t));renderSlots(list);
